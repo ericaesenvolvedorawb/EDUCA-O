@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroMundo: Aventuras na Leitura e nos Números</title>
+    <style>
+        /* Importação da fonte OpenDyslexic */
+        @font-face {
+            font-family: 'OpenDyslexic';
+            src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/otf/OpenDyslexic-Regular.otf') format('opentype');
+        }
+
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2196F3;
+            --accent-color: #FF9800;
+            --background-color: #f5f5f5;
+            --text-color: #333;
+            --card-color: #fff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .app-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--card-color);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            min-height: 95vh;
+            position: relative;
+        }
+
+        /* Estilos para acessibilidade */
+        .dyslexic-font {
+            font-family: 'OpenDyslexic', Arial, sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        .uppercase {
+            text-transform: uppercase;
+        }
+
+        .high-contrast {
+            --background-color: #000;
+            --card-color: #111;
+            --text-color: #fff;
+            --primary-color: #ffcc00;
+            --secondary-color: #00ccff;
+            --accent-color: #ff6600;
+        }
+
+        /* Header e navegação */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .avatar-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-name {
+            font-weight: bold;
+        }
+
+        /* Menu principal */
+        .main-menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+
+        .menu-item.portuguese {
+            background-color: var(--secondary-color);
+        }
+
+        .menu-item.math {
+            background-color: var(--accent-color);
+        }
+
+        /* Configurações */
+        .settings-panel {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .settings-section {
+            margin-bottom: 15px;
+        }
+
+        .settings-section h3 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .setting-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Atividades */
+        .activity-container {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .activity-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .close-activity {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .activity-content {
+            margin-bottom: 15px;
+        }
+
+        .activity-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .option {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background-color: #e0e0e0;
+        }
+
+        .correct {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .incorrect {
+            background-color: #f44336;
+            color: white;
+        }
+
+        /* Conquistas */
+        .achievements-panel {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .achievement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .achievement-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: white;
+        }
+
+        .achievement.bronze .achievement-icon {
+            background-color: #cd7f32; /* Bronze */
+        }
+
+        .achievement.silver .achievement-icon {
+            background-color: #c0c0c0; /* Prata */
+        }
+
+        .achievement.gold .achievement-icon {
+            background-color: #ffd700; /* Ouro */
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-title {
+            font-weight: bold;
+        }
+
+        .achievement-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Botões */
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-accent {
+            background-color: var(--accent-color);
+        }
+
+        /* Navegação inferior */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--card-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .nav-label {
+            font-size: 0.8rem;
+        }
+
+        /* Utilitários */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-20 {
+            margin-top: 20px;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: var(--card-color);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Avatar personalizável */
+        .avatar-customization {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .avatar-preview {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .customization-option {
+            margin-bottom: 10px;
+        }
+
+        .customization-option label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .customization-option select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        /* Barra de progresso */
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">NeuroMundo</div>
+            <div class="avatar-section">
+                <div class="avatar" id="user-avatar">AV</div>
+                <div class="user-name" id="user-name">Aventureiro</div>
+            </div>
+        </header>
+
+        <!-- Tela Principal -->
+        <div id="main-screen">
+            <div class="main-menu">
+                <div class="menu-item portuguese" id="portuguese-btn">
+                    <h2>Floresta das Palavras</h2>
+                    <p>Língua Portuguesa</p>
+                </div>
+                <div class="menu-item math" id="math-btn">
+                    <h2>Montanha dos Números</h2>
+                    <p>Matemática</p>
+                </div>
+                <div class="menu-item" id="missions-btn">
+                    <h2>Mapa da Aventura</h2>
+                    <p>Missões</p>
+                </div>
+                <div class="menu-item" id="achievements-btn">
+                    <h2>Baú de Troféus</h2>
+                    <p>Conquistas</p>
+                </div>
+            </div>
+
+            <div class="settings-panel">
+                <h3>Configurações</h3>
+                
+                <div class="settings-section">
+                    <h4>Quem Joga</h4>
+                    <div class="setting-option">
+                        <span>Personalizar Avatar</span>
+                        <button id="customize-avatar-btn">Editar</button>
+                    </div>
+                    <div class="setting-option">
+                        <span>Nome do Jogador</span>
+                        <input type="text" id="player-name" placeholder="Digite seu nome">
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h4>Como Eu Vejo</h4>
+                    <div class="setting-option">
+                        <span>Usar Fonte OpenDyslexic</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="dyslexic-font-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-option">
+                        <span>Letras MAIÚSCULAS</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="uppercase-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-option">
+                        <span>Alto Contraste</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="high-contrast-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h4>Como Eu Ouço</h4>
+                    <div class="setting-option">
+                        <span>Ativar Leitura de Áudio</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="audio-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-option">
+                        <span>Ativar Efeitos Sonoros</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="sound-effects-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-option">
+                        <span>Ativar Música Temática</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="music-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela de Português -->
+        <div id="portuguese-screen" class="hidden">
+            <div class="activity-header">
+                <h2 class="activity-title">Floresta das Palavras</h2>
+                <button class="close-activity" id="close-portuguese">×</button>
+            </div>
+            
+            <div class="activity-container">
+                <h3>Caça ao Som Inicial</h3>
+                <p class="activity-content">Arraste o esquilo para as imagens que começam com a sílaba "CA".</p>
+                
+                <div class="activity-options">
+                    <div class="option" data-correct="true">CASA</div>
+                    <div class="option" data-correct="false">BOLA</div>
+                    <div class="option" data-correct="true">CACHORRO</div>
+                    <div class="option" data-correct="false">PATO</div>
+                </div>
+                
+                <button class="btn-secondary mt-20" id="next-portuguese-activity">Próxima Atividade</button>
+            </div>
+        </div>
+
+        <!-- Tela de Matemática -->
+        <div id="math-screen" class="hidden">
+            <div class="activity-header">
+                <h2 class="activity-title">Montanha dos Números</h2>
+                <button class="close-activity" id="close-math">×</button>
+            </div>
+            
+            <div class="activity-container">
+                <h3>Loja da Floresta</h3>
+                <p class="activity-content">Uma maçã custa 2 moedas. Um mel custa 5 moedas. Quanto custam os dois juntos?</p>
+                
+                <div class="activity-options">
+                    <div class="option" data-correct="false">5 moedas</div>
+                    <div class="option" data-correct="false">6 moedas</div>
+                    <div class="option" data-correct="true">7 moedas</div>
+                    <div class="option" data-correct="false">8 moedas</div>
+                </div>
+                
+                <button class="btn-secondary mt-20" id="next-math-activity">Próxima Atividade</button>
+            </div>
+        </div>
+
+        <!-- Tela de Conquistas -->
+        <div id="achievements-screen" class="hidden">
+            <div class="activity-header">
+                <h2 class="activity-title">Baú de Troféus</h2>
+                <button class="close-activity" id="close-achievements">×</button>
+            </div>
+            
+            <div class="achievements-panel">
+                <div class="achievement bronze">
+                    <div class="achievement-icon">B</div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Leitor de Primeira Viagem</div>
+                        <div class="achievement-description">Complete sua primeira história no Teatro de Marionetes</div>
+                    </div>
+                </div>
+                
+                <div class="achievement silver">
+                    <div class="achievement-icon">P</div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Treinador Incansável</div>
+                        <div class="achievement-description">Tente a mesma atividade 5 vezes</div>
+                    </div>
+                </div>
+                
+                <div class="achievement gold">
+                    <div class="achievement-icon">O</div>
+                    <div class="achievement-info">
+                        <div class="achievement-title">Amigo dos Animais</div>
+                        <div class="achievement-description">Desbloqueie a missão secreta do sapo com frio</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Personalização do Avatar -->
+        <div id="avatar-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Personalizar Avatar</h3>
+                    <button class="close-modal" id="close-avatar-modal">×</button>
+                </div>
+                
+                <div class="avatar-customization">
+                    <div class="avatar-preview">
+                        <div class="avatar" id="avatar-preview" style="width: 100px; height: 100px; font-size: 2rem;">AV</div>
+                    </div>
+                    
+                    <div class="customization-option">
+                        <label for="avatar-skin">Pele</label>
+                        <select id="avatar-skin">
+                            <option value="#f8d7b4">Clara</option>
+                            <option value="#d2a679">Média</option>
+                            <option value="#a86f4c">Escura</option>
+                        </select>
+                    </div>
+                    
+                    <div class="customization-option">
+                        <label for="avatar-hair">Cabelo</label>
+                        <select id="avatar-hair">
+                            <option value="black">Preto</option>
+                            <option value="brown">Castanho</option>
+                            <option value="blonde">Loiro</option>
+                            <option value="red">Ruivo</option>
+                        </select>
+                    </div>
+                    
+                    <div class="customization-option">
+                        <label for="avatar-eyes">Olhos</label>
+                        <select id="avatar-eyes">
+                            <option value="brown">Castanhos</option>
+                            <option value="blue">Azuis</option>
+                            <option value="green">Verdes</option>
+                        </select>
+                    </div>
+                    
+                    <div class="customization-option">
+                        <label for="avatar-clothes">Roupas</label>
+                        <select id="avatar-clothes">
+                            <option value="red">Vermelho</option>
+                            <option value="blue">Azul</option>
+                            <option value="green">Verde</option>
+                            <option value="yellow">Amarelo</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button id="save-avatar" class="mt-20">Salvar Avatar</button>
+            </div>
+        </div>
+
+        <!-- Navegação Inferior -->
+        <div class="bottom-nav">
+            <div class="nav-item" id="nav-home">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Início</div>
+            </div>
+            <div class="nav-item" id="nav-missions">
+                <div class="nav-icon">🗺️</div>
+                <div class="nav-label">Missões</div>
+            </div>
+            <div class="nav-item" id="nav-achievements">
+                <div class="nav-icon">🏆</div>
+                <div class="nav-label">Conquistas</div>
+            </div>
+            <div class="nav-item" id="nav-settings">
+                <div class="nav-icon">⚙️</div>
+                <div class="nav-label">Configurações</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Elementos DOM
+        const mainScreen = document.getElementById('main-screen');
+        const portugueseScreen = document.getElementById('portuguese-screen');
+        const mathScreen = document.getElementById('math-screen');
+        const achievementsScreen = document.getElementById('achievements-screen');
+        const avatarModal = document.getElementById('avatar-modal');
+
+        // Botões de navegação
+        document.getElementById('portuguese-btn').addEventListener('click', () => showScreen(portugueseScreen));
+        document.getElementById('math-btn').addEventListener('click', () => showScreen(mathScreen));
+        document.getElementById('achievements-btn').addEventListener('click', () => showScreen(achievementsScreen));
+        document.getElementById('customize-avatar-btn').addEventListener('click', () => showScreen(avatarModal));
+
+        // Botões de fechar
+        document.getElementById('close-portuguese').addEventListener('click', () => showScreen(mainScreen));
+        document.getElementById('close-math').addEventListener('click', () => showScreen(mainScreen));
+        document.getElementById('close-achievements').addEventListener('click', () => showScreen(mainScreen));
+        document.getElementById('close-avatar-modal').addEventListener('click', () => showScreen(mainScreen));
+
+        // Navegação inferior
+        document.getElementById('nav-home').addEventListener('click', () => showScreen(mainScreen));
+        document.getElementById('nav-achievements').addEventListener('click', () => showScreen(achievementsScreen));
+
+        // Configurações de acessibilidade
+        document.getElementById('dyslexic-font-toggle').addEventListener('change', function() {
+            document.body.classList.toggle('dyslexic-font', this.checked);
+        });
+
+        document.getElementById('uppercase-toggle').addEventListener('change', function() {
+            document.body.classList.toggle('uppercase', this.checked);
+        });
+
+        document.getElementById('high-contrast-toggle').addEventListener('change', function() {
+            document.body.classList.toggle('high-contrast', this.checked);
+        });
+
+        // Personalização do avatar
+        document.getElementById('save-avatar').addEventListener('click', function() {
+            const skinColor = document.getElementById('avatar-skin').value;
+            const hairColor = document.getElementById('avatar-hair').value;
+            const eyeColor = document.getElementById('avatar-eyes').value;
+            const clothesColor = document.getElementById('avatar-clothes').value;
+            
+            const avatarPreview = document.getElementById('avatar-preview');
+            const userAvatar = document.getElementById('user-avatar');
+            
+            // Aplicar cores ao avatar (simulação)
+            avatarPreview.style.backgroundColor = clothesColor;
+            userAvatar.style.backgroundColor = clothesColor;
+            
+            showScreen(mainScreen);
+            alert('Avatar personalizado com sucesso!');
+        });
+
+        // Atualizar nome do usuário
+        document.getElementById('player-name').addEventListener('input', function() {
+            document.getElementById('user-name').textContent = this.value || 'Aventureiro';
+        });
+
+        // Atividades interativas
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const isCorrect = this.getAttribute('data-correct') === 'true';
+                
+                if (isCorrect) {
+                    this.classList.add('correct');
+                    // Simular conquista
+                    setTimeout(() => {
+                        alert('Parabéns! Você ganhou a conquista "Detetive de Sílabas"!');
+                    }, 500);
+                } else {
+                    this.classList.add('incorrect');
+                }
+                
+                // Desabilitar outras opções após seleção
+                this.parentElement.querySelectorAll('.option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                });
+            });
+        });
+
+        // Função para mostrar telas
+        function showScreen(screen) {
+            // Esconder todas as telas
+            mainScreen.classList.add('hidden');
+            portugueseScreen.classList.add('hidden');
+            mathScreen.classList.add('hidden');
+            achievementsScreen.classList.add('hidden');
+            avatarModal.classList.add('hidden');
+            
+            // Mostrar a tela solicitada
+            screen.classList.remove('hidden');
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar nome padrão
+            document.getElementById('player-name').value = 'Aventureiro';
+            
+            // Ativar funcionalidades de acessibilidade se necessário
+            if (document.getElementById('audio-toggle').checked) {
+                // Simular ativação de áudio
+                console.log('Áudio ativado');
+            }
+        });
+    </script>
+</body>
+</html>
